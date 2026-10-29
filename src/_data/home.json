@@ -1,0 +1,31 @@
+{
+  "eyebrow": "Quinlan, Texas · ATV & UTV riding",
+  "tagline": "Hit the trails. Make the memories.",
+  "intro": "300 acres. Woods, mud, open runs, and views you'll want to come back for. Ride safe, have fun, and we'll see you out here again.",
+  "hero_image": "/media/hero-banner.webp",
+  "stats": [
+    {
+      "label": "Property",
+      "value": "300",
+      "unit": "acres"
+    },
+    {
+      "label": "Loops",
+      "value": "3",
+      "unit": "lengths"
+    },
+    {
+      "label": "Vehicles",
+      "value": "ATV · UTV",
+      "unit": ""
+    },
+    {
+      "label": "Terrain",
+      "value": "Woods · Mud",
+      "unit": ""
+    }
+  ],
+  "welcome_quote": "Welcome to Mustang Trails. We're excited to have you here and hope you're ready for an unforgettable day of riding.",
+  "welcome_text": "With over 300 acres of trails to explore, there's always something new to discover, from winding paths through the woods and open stretches to muddy sections and scenic views that make every ride unique.\n\nWhether you're looking to spend the day with family, meet up with friends, or simply enjoy the outdoors, Mustang Trails is the perfect place to get away, have fun, and make lasting memories. Thank you for choosing to ride with us. We hope you enjoy every mile and leave already looking forward to your next trip back.",
+  "namesake": "Our name has a namesake on the other side of the world: **Mustang, Nepal**, the high, wind-swept Himalayan district around Jomsom, where prayer flags snap above the Kali Gandaki valley. You'll find a little of that spirit out here too."
+}

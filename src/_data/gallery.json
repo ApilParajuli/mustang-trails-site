@@ -1,0 +1,125 @@
+{
+  "title": "Out on the trails.",
+  "photos": [
+    {
+      "image": "/media/gallery/mud-trail.webp",
+      "caption": "Side-by-sides in the deep mud",
+      "alt": "Two Polaris side-by-sides driving through deep mud on a wooded trail.",
+      "category": "mud"
+    },
+    {
+      "image": "/media/gallery/crew-group.webp",
+      "caption": "The crew",
+      "alt": "Five friends standing together on a wooded trail.",
+      "category": "crew"
+    },
+    {
+      "image": "/media/gallery/jeep-by-pond.webp",
+      "caption": "Jeep by the pond",
+      "alt": "Two riders in a yellow Jeep Wrangler parked beside the pond.",
+      "category": "ride"
+    },
+    {
+      "image": "/media/gallery/mud-wave.webp",
+      "caption": "Mud to the knees",
+      "alt": "A rider covered in mud waving from his ATV in a muddy clearing.",
+      "category": "mud"
+    },
+    {
+      "image": "/media/gallery/atv-mud-puddle.webp",
+      "caption": "Through the water",
+      "alt": "An ATV crossing a long muddy puddle under tall trees.",
+      "category": "mud"
+    },
+    {
+      "image": "/media/gallery/pond-ride.webp",
+      "caption": "Around the pond",
+      "alt": "Two riders on an ATV cruising the gravel loop past the pond.",
+      "category": "ride"
+    },
+    {
+      "image": "/media/gallery/ranger-break.webp",
+      "caption": "Cooler break",
+      "alt": "Friends taking a break around a Polaris Ranger with a cooler.",
+      "category": "crew"
+    },
+    {
+      "image": "/media/gallery/jeep-mud-trail.webp",
+      "caption": "Jeep on the creek trail",
+      "alt": "A mud-caked yellow Jeep on a wet forest trail.",
+      "category": "mud"
+    },
+    {
+      "image": "/media/gallery/crew-in-the-woods.webp",
+      "caption": "Trucks in the woods",
+      "alt": "Friends standing by their pickup trucks on a shaded dirt trail.",
+      "category": "crew"
+    },
+    {
+      "image": "/media/gallery/atv-lesson.webp",
+      "caption": "First ride",
+      "alt": "A rider on a Polaris ATV while friends watch from the yard.",
+      "category": "ride"
+    },
+    {
+      "image": "/media/gallery/after-the-mud.webp",
+      "caption": "After the run",
+      "alt": "Riders gathered around a muddy CFMOTO ATV and side-by-side.",
+      "category": "crew"
+    },
+    {
+      "image": "/media/gallery/staff-mule.webp",
+      "caption": "Staff on the Mule",
+      "alt": "A staff member at the wheel of a green Kawasaki Mule.",
+      "category": "ride"
+    },
+    {
+      "image": "/media/gallery/kids-on-trail.webp",
+      "caption": "Kids day",
+      "alt": "Kids and parents exploring a freshly graded trail.",
+      "category": "crew"
+    },
+    {
+      "image": "/media/gallery/jeep-parked.webp",
+      "caption": "Yellow Jeep, well used",
+      "alt": "A muddy yellow Jeep parked on gravel with a rider on the phone beside it.",
+      "category": "mud"
+    },
+    {
+      "image": "/media/gallery/rider-selfie.webp",
+      "caption": "Trail check",
+      "alt": "A rider in a sun hat taking a selfie beside his ATV on a wooded trail.",
+      "category": "ride"
+    },
+    {
+      "image": "/media/gallery/cforce-closeup.webp",
+      "caption": "CFORCE 1000",
+      "alt": "Close-up of a mud-splattered camo CFMOTO CFORCE 1000 ATV.",
+      "category": "mud"
+    },
+    {
+      "image": "/media/gallery/two-friends.webp",
+      "caption": "Old friends",
+      "alt": "Two friends in camo standing on a shaded trail.",
+      "category": "crew"
+    },
+    {
+      "image": "/media/gallery/rigs-parked.webp",
+      "caption": "Parked up",
+      "alt": "A camo CFMOTO ATV and a Polaris side-by-side parked on the gravel lot.",
+      "category": "ride"
+    },
+    {
+      "image": "/media/gallery/crew-catching-up.webp",
+      "caption": "Catching up",
+      "alt": "Friends talking in the woods after a ride.",
+      "category": "crew"
+    },
+    {
+      "image": "/media/gallery/pond-catfish.webp",
+      "caption": "Catfish in the pond",
+      "alt": "Two catfish surfacing in the pond.",
+      "category": "ride"
+    }
+  ]
+}

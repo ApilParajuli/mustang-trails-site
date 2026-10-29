@@ -1,0 +1,15 @@
+{
+  "title": "Hours and what's at the trailhead.",
+  "hours": "8 am to 7 pm",
+  "hours_note": "Trails close after heavy rain to protect them. Check here before you head out.",
+  "trailhead": [
+    "Parking for trucks with trailers",
+    "Restrooms",
+    "Vehicle staging and wash-down area",
+    "Covered gathering spot",
+    "Trash and recycling"
+  ],
+  "directions": "The property sits where County Road 2264 meets County Road 2296, with West Caddo Creek along the north side.",
+  "map_image": "/media/property-map.webp",
+  "map_caption": "Orientation map from satellite imagery. Property outline and trails are approximate until GPS-traced."
+}

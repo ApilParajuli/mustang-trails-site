@@ -1,0 +1,46 @@
+{
+  "title": "Pick a pass and ride.",
+  "intro": "Every rider signs a waiver at check-in. Bring your own ATV or UTV, or ask about rentals.",
+  "rows": [
+    {
+      "name": "Day pass",
+      "price": "",
+      "price_note": "",
+      "coming_soon": true,
+      "details": "All trails, sunrise to sunset, one vehicle",
+      "button": "Notify me",
+      "link": "#signup",
+      "payment_link": ""
+    },
+    {
+      "name": "Season pass",
+      "price": "",
+      "price_note": "",
+      "coming_soon": true,
+      "details": "Unlimited ride days for the season",
+      "button": "Notify me",
+      "link": "#signup",
+      "payment_link": ""
+    },
+    {
+      "name": "Rentals",
+      "price": "",
+      "price_note": "",
+      "coming_soon": true,
+      "details": "ATV or UTV, helmet included",
+      "button": "Notify me",
+      "link": "#signup",
+      "payment_link": ""
+    },
+    {
+      "name": "Groups",
+      "price": "$50",
+      "price_note": "entrance fee",
+      "coming_soon": false,
+      "details": "Clubs, birthdays and company outings",
+      "button": "Book",
+      "link": "#contact",
+      "payment_link": ""
+    }
+  ]
+}

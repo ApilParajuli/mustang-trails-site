@@ -1,0 +1,403 @@
+---
+permalink: /index.html
+---
+{%- set phone1 = site.phones[0] -%}
+{%- set maps = site | mapsQuery -%}
+{%- set statusLabels = { open: "Trails open", limited: "Some trails closed", closed: "Trails closed", soon: "Opening soon" } -%}
+{%- set state = status.state if statusLabels[status.state] else "soon" -%}
+{%- set base = site.website_address | replace(r/\/+$/, "") -%}
+{%- set payLinks = pricing.rows | selectattr("payment_link") | list -%}
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="{{ site.description }}">
+<title>{{ site.name }}</title>
+<meta name="theme-color" content="#1f7a45">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<!-- Link previews (Facebook, iMessage, WhatsApp, X) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{{ site.name }}">
+<meta property="og:title" content="{{ site.share_title }}">
+<meta property="og:description" content="{{ site.share_text }}">
+<meta property="og:image" content="{{ base }}{{ '/' if base }}assets/share.jpg">
+{%- if base %}
+<meta property="og:url" content="{{ base }}/">
+<link rel="canonical" href="{{ base }}/">
+{%- endif %}
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Two side-by-sides driving a muddy wooded trail at Mustang Trails">
+<meta name="twitter:card" content="summary_large_image">
+<!-- Business details Google reads for search results and Maps -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SportsActivityLocation",
+  "name": {{ site.name | dump | safe }},
+  "description": {{ site.share_text | dump | safe }},
+  "image": {{ (base + ('/' if base) + 'assets/share.jpg') | dump | safe }},
+  "telephone": [{% for p in site.phones %}{{ (p | tel) | dump | safe }}{{ ", " if not loop.last }}{% endfor %}],
+  "email": {{ site.email | dump | safe }},
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": {{ site.street | dump | safe }},
+    "addressLocality": {{ site.city | dump | safe }},
+    "addressRegion": {{ site.state | dump | safe }},
+    "addressCountry": "US"
+  },
+  "sameAs": {{ [site.facebook, site.instagram, site.google_profile] | select | list | dump | safe }}
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+{% include "styles.css" %}
+</style>
+<script>
+// Apply the saved theme before paint so there is no flash.
+(function () {
+  try { var t = localStorage.getItem("mt-theme"); if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t); } catch (e) {}
+})();
+</script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top">{{ site.name }}</a>
+    <div class="nav-right">
+      <nav aria-label="Main">
+        <ul>
+          {% if images.gallery.length %}<li><a href="#gallery">Gallery</a></li>{% endif %}
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#schedule">Ride day</a></li>
+          <li><a href="#map">Map</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <a class="btn btn-primary btn-book" href="#pricing">Book a ride</a>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode">
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <span id="theme-label">Light</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+
+{%- if status.show %}
+<div class="status" id="status" data-state="{{ state }}" role="status">
+  <div class="wrap">
+    <span class="status-pill"><i aria-hidden="true"></i><span id="status-label">{{ statusLabels[state] }}</span></span>
+    <span class="status-msg" id="status-msg">{{ status.message }}</span>
+    <span class="status-date" id="status-date">{% if status.updated %}Updated {{ status.updated | shortDate }}{% endif %}</span>
+  </div>
+</div>
+{%- endif %}
+
+<main id="top">
+  <div class="hero">
+    {%- if images.hero %}
+    <img class="hero-bg" src="{{ images.hero.large.url }}" width="{{ images.hero.large.width }}" height="{{ images.hero.large.height }}" alt="" fetchpriority="high" decoding="async">
+    {%- endif %}
+    <canvas class="dots" id="dots" aria-hidden="true"></canvas>
+    <svg class="flags" viewBox="0 0 1200 70" preserveAspectRatio="none" aria-hidden="true" data-flags></svg>
+    <div class="wrap hero-copy">
+      <span class="label">{{ home.eyebrow }}</span>
+      <h1>Mustang<span>Trails</span></h1>
+      <h2 class="tagline">{{ home.tagline }}</h2>
+      <p class="lede">{{ home.intro | rich | safe }}</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="#pricing">Book a ride</a>
+        <a class="btn btn-outline" href="https://www.google.com/maps/dir/?api=1&amp;destination={{ (site.street + ' ' + site.city + ' ' + site.state) | urlencode }}" target="_blank" rel="noopener">Get directions</a>
+      </div>
+    </div>
+    <svg class="ridges" viewBox="0 0 1440 260" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+      <path class="far" d="M0 190 L120 150 L210 168 L330 92 L420 130 L520 60 L585 88 L640 40 L700 82 L790 70 L880 120 L990 74 L1080 110 L1180 66 L1300 120 L1440 96 L1440 260 L0 260 Z"/>
+      <path class="snow" d="M600 72 L640 40 L676 66 L656 62 L640 74 L622 64 Z"/>
+      <path class="snow" d="M496 72 L520 60 L540 70 L524 74 Z"/>
+      <path class="snow" d="M1160 76 L1180 66 L1204 78 L1186 80 Z"/>
+      <path class="mid" d="M0 210 L140 176 L260 196 L380 150 L500 186 L640 140 L760 180 L900 150 L1040 190 L1180 160 L1320 186 L1440 168 L1440 260 L0 260 Z"/>
+      <path class="near" d="M0 236 C160 214 300 230 440 218 S720 206 880 222 S1180 238 1300 222 S1400 216 1440 220 L1440 260 L0 260 Z"/>
+    </svg>
+  </div>
+
+  </div>
+
+  <div class="wrap">
+    <div class="stats" aria-label="Mustang Trails at a glance">
+      {%- for s in home.stats %}
+      <div class="stat"><span class="label">{{ s.label }}</span><strong>{% if s.value | isWhole %}<span data-count="{{ s.value }}">{{ s.value }}</span>{% else %}{{ s.value }}{% endif %}{% if s.unit %}<small>{{ s.unit }}</small>{% endif %}</strong></div>
+      {%- endfor %}
+    </div>
+  </div>
+
+  <section id="welcome">
+    <div class="wrap split">
+      <div class="prose">
+        <span class="label">Welcome</span>
+        <p class="welcome-quote">{{ home.welcome_quote | rich | safe }}</p>
+      </div>
+      <div class="prose">
+        {{ home.welcome_text | paras | safe }}
+        {%- if home.namesake %}
+        <div class="namesake">
+          <svg viewBox="0 0 44 44" aria-hidden="true">
+            <path d="M4 36 L16 16 L22 24 L28 10 L40 36 Z" style="fill:var(--ridge-mid)"/>
+            <path d="M24 18 L28 10 L32 18 L28 16 Z" style="fill:var(--snow);stroke:var(--flag-edge);stroke-width:.5"/>
+            <rect x="6" y="5" width="5" height="6" class="fb"/><rect x="12" y="6" width="5" height="6" class="fw" style="stroke:var(--flag-edge);stroke-width:.5"/><rect x="18" y="5" width="5" height="6" class="fr"/><rect x="24" y="4" width="5" height="6" class="fg"/><rect x="30" y="3" width="5" height="6" class="fy"/>
+          </svg>
+          <p>{{ home.namesake | rich | safe }}</p>
+        </div>
+        {%- endif %}
+      </div>
+    </div>
+  </section>
+
+  {%- set photos = images.gallery %}
+  {%- if photos.length %}
+  <section id="gallery" class="bg-sage">
+    <div class="wrap">
+      <div class="gallery-head">
+        <div class="section-head" style="margin:0">
+          <span class="label">Gallery · {{ photos.length }} photo{{ "s" if photos.length != 1 }}</span>
+          <h2>{{ gallery.title }}</h2>
+        </div>
+        <div class="chips" role="group" aria-label="Filter photos">
+          <button type="button" class="chip-btn" data-filter="all" aria-pressed="true">All</button>
+          <button type="button" class="chip-btn" data-filter="mud" aria-pressed="false">Mud &amp; trails</button>
+          <button type="button" class="chip-btn" data-filter="ride" aria-pressed="false">On the ride</button>
+          <button type="button" class="chip-btn" data-filter="crew" aria-pressed="false">Good company</button>
+        </div>
+      </div>
+      <div class="carousel" id="carousel" tabindex="0" aria-label="Photo gallery, scroll sideways">
+        {%- for p in photos %}
+        <figure class="tile" data-cat="{{ p.category or 'ride' }}"><button type="button" class="tile-btn" data-i="{{ loop.index0 }}" data-full="{{ p.img.large.url }}" data-cap="{{ p.caption }}"><img src="{{ p.img.small.url }}" width="{{ p.img.small.width }}" height="{{ p.img.small.height }}" loading="lazy" decoding="async" alt="{{ p.alt or p.caption }}"></button>{% if p.caption %}<figcaption>{{ p.caption }}</figcaption>{% endif %}</figure>
+        {%- endfor %}
+      </div>
+      <div class="car-controls">
+        <span class="car-count" id="car-count" aria-live="polite">1–{{ 3 if photos.length > 3 else photos.length }} of {{ photos.length }}</span>
+        <span class="car-bar" aria-hidden="true"><i id="car-bar"></i></span>
+        <div class="car-btns">
+          <button type="button" class="car-btn" id="car-prev" aria-label="Previous photos">&#8249;</button>
+          <button type="button" class="car-btn" id="car-next" aria-label="Next photos">&#8250;</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer" hidden>
+    <button type="button" class="lb-close" id="lb-close" aria-label="Close">&times;</button>
+    <button type="button" class="lb-nav lb-prev" id="lb-prev" aria-label="Previous photo">&#8249;</button>
+    <figure class="lb-fig"><img id="lb-img" alt=""><figcaption id="lb-cap"></figcaption></figure>
+    <button type="button" class="lb-nav lb-next" id="lb-next" aria-label="Next photo">&#8250;</button>
+  </div>
+  {%- endif %}
+
+  <section id="pricing">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="label">Ride details &amp; pricing</span>
+        <h2>{{ pricing.title }}</h2>
+        <p>{{ pricing.intro | rich | safe }}</p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Pass</th><th>Price</th><th>What's included</th><th><span class="sr-only">Book</span></th></tr></thead>
+          <tbody>
+            {%- for row in pricing.rows %}
+            <tr><td><strong>{{ row.name }}</strong></td><td class="num">{% if row.coming_soon or not row.price %}<span class="soon">Coming soon</span>{% else %}{{ row.price }}{% if row.price_note %} <span class="muted">{{ row.price_note }}</span>{% endif %}{% endif %}</td><td><span class="muted">{{ row.details | rich | safe }}</span></td><td>
+              {%- if row.payment_link and not row.coming_soon -%}
+              <a class="btn btn-primary btn-sm" href="{{ row.payment_link }}" target="_blank" rel="noopener">Buy</a>
+              {%- elif row.button -%}
+              <a class="btn {{ 'btn-outline' if row.coming_soon else 'btn-primary' }} btn-sm" href="{{ row.link or '#contact' }}">{{ row.button }}</a>
+              {%- endif -%}
+            </td></tr>
+            {%- endfor %}
+          </tbody>
+        </table>
+      </div>
+      <p class="pay-note" id="pay-note">{% if payLinks.length %}Pay online with card, Apple Pay or Google Pay. Show your receipt at check-in.{% else %}Online payment is coming soon. Book by phone or message for now.{% endif %}</p>
+    </div>
+  </section>
+
+  <section id="schedule" class="bg-pine">
+    <div class="wrap split">
+      <div class="section-head">
+        <span class="label">Ride day</span>
+        <h2>{{ schedule.title }}</h2>
+        {%- if schedule.intro %}
+        <p>{{ schedule.intro | rich | safe }}</p>
+        {%- endif %}
+        {%- if schedule.note %}
+        <p>{{ schedule.note | rich | safe }}</p>
+        {%- endif %}
+        {%- if schedule.bring.length %}
+        <div class="bring">
+          <h3>Bring along</h3>
+          <ul>
+            {%- for item in schedule.bring %}
+            <li>{{ item }}</li>
+            {%- endfor %}
+          </ul>
+        </div>
+        {%- endif %}
+        {%- if images.schedule %}
+        <figure class="day-photo">
+          <img src="{{ images.schedule.large.url }}" width="{{ images.schedule.large.width }}" height="{{ images.schedule.large.height }}" loading="lazy" decoding="async" alt="{{ schedule.photo_caption or 'Riders at Mustang Trails' }}">
+          {%- if schedule.photo_caption %}
+          <figcaption>{{ schedule.photo_caption }}</figcaption>
+          {%- endif %}
+        </figure>
+        {%- endif %}
+      </div>
+      <div class="table-wrap schedule">
+        <table>
+          <tbody>
+            {%- for row in schedule.rows %}
+            <tr><td>{{ row.time }}</td><td><strong>{{ row.title }}</strong> {{ row.text | rich | safe }}</td></tr>
+            {%- endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="visit" class="bg-mist">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="label">Plan your visit</span>
+        <h2>{{ visit.title }}</h2>
+      </div>
+      <div class="cards two">
+        <div class="card">
+          <h3>Hours</h3>
+          <p>{{ visit.hours | rich | safe }}</p>
+          {%- if visit.hours_note %}
+          <p style="color:var(--muted);font-size:.95rem">{{ visit.hours_note | rich | safe }}</p>
+          {%- endif %}
+        </div>
+        <div class="card">
+          <h3>At the trailhead</h3>
+          <ul>
+            {%- for item in visit.trailhead %}
+            <li>{{ item | rich | safe }}</li>
+            {%- endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="wrap split">
+      <div class="prose">
+        <span class="label">Map &amp; directions</span>
+        <h2>Finding us.</h2>
+        <p class="address">{{ site.street }}<br>{{ site.city }}, {{ site.state }}</p>
+        <p>{{ visit.directions | rich | safe }}</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="{{ maps }}" target="_blank" rel="noopener">Open in Google Maps</a>
+        </div>
+      </div>
+      {%- if images.map %}
+      <figure class="map-fig">
+        <img src="{{ images.map.large.url }}" width="{{ images.map.large.width }}" height="{{ images.map.large.height }}" loading="lazy" decoding="async" alt="Orientation map of the Mustang Trails property and the roads around it.">
+        {%- if visit.map_caption %}
+        <figcaption>{{ visit.map_caption }}</figcaption>
+        {%- endif %}
+      </figure>
+      {%- endif %}
+    </div>
+  </section>
+
+  <section id="contact" class="bg-sand">
+    <div class="wrap split">
+      <div class="prose">
+        <span class="label">Contact</span>
+        <h2>{{ contact.title }}</h2>
+        <p>{{ contact.intro | rich | safe }}</p>
+        <div class="contact-lines">
+          <div><span class="label">Phone</span>{% for p in site.phones %}<a href="tel:{{ p | tel }}">{{ p }}</a>{% endfor %}</div>
+          <div><span class="label">Email</span><a href="mailto:{{ site.email }}">{{ site.email }}</a></div>
+          <div><span class="label">Follow along</span><div class="social">
+          {%- if site.facebook %}
+          <a href="{{ site.facebook }}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-7.5H16l.4-3H13.5V8.6c0-.9.3-1.5 1.5-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.8 1.4-3.8 3.9v2.3H8v3h2.5V21h3z"/></svg>Facebook</a>
+          {%- else %}
+          <a class="unset" href="#contact" title="Page coming soon"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-7.5H16l.4-3H13.5V8.6c0-.9.3-1.5 1.5-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.8 1.4-3.8 3.9v2.3H8v3h2.5V21h3z"/></svg>Facebook</a>
+          {%- endif %}
+          {%- if site.instagram %}
+          <a href="{{ site.instagram }}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg>Instagram</a>
+          {%- else %}
+          <a class="unset" href="#contact" title="Page coming soon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg>Instagram</a>
+          {%- endif %}
+          <a href="{{ site.google_profile or maps }}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>Google Maps</a>
+        </div></div>
+        </div>
+      </div>
+      <form id="contact-form" novalidate>
+        <div class="field"><label for="c-name">Name</label><input id="c-name" name="name" type="text" autocomplete="name" required></div>
+        <div class="field-row">
+          <div class="field"><label for="c-email">Email</label><input id="c-email" name="email" type="email" autocomplete="email" required></div>
+          <div class="field"><label for="c-phone">Phone (optional)</label><input id="c-phone" name="phone" type="tel" autocomplete="tel"></div>
+        </div>
+        <div class="field"><label for="c-topic">What's it about?</label>
+          <select id="c-topic" name="topic">
+            {%- for t in contact.topics %}
+            <option>{{ t }}</option>
+            {%- endfor %}
+          </select>
+        </div>
+        <div class="field"><label for="c-msg">Message</label><textarea id="c-msg" name="message" required></textarea></div>
+        <div class="hp" aria-hidden="true"><label for="c-hp">Leave this empty</label><input id="c-hp" name="_honey" type="text" tabindex="-1" autocomplete="off"></div>
+        <div class="actions"><button class="btn btn-primary" type="submit" id="c-send">Send message</button></div>
+        <p class="form-note" id="form-note" aria-live="polite">Messages go straight to {{ site.email }}.</p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<section class="signup" id="signup" aria-labelledby="signup-h">
+  <div class="wrap">
+    <div class="prose">
+      <h2 id="signup-h">{{ contact.signup_title }}</h2>
+      <p>{{ contact.signup_text | rich | safe }}</p>
+    </div>
+    <form id="signup-form" novalidate>
+      <label for="s-email" class="sr-only">Email</label>
+      <input id="s-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+      <button class="btn" type="submit" id="s-send">Sign up</button>
+      <p class="form-note" id="signup-note" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+<footer class="bg-pine">
+  <svg class="flags" viewBox="0 0 1200 70" preserveAspectRatio="none" aria-hidden="true" data-flags></svg>
+  <div class="wrap">
+    <div class="foot-cols">
+      <div class="foot-brand">
+        <a class="brand" href="#top">{{ site.name }}</a>
+        <span>{{ site.street }}<br>{{ site.city }}, {{ site.state }}</span>
+      </div>
+      <div><h3>Ride</h3><ul><li><a href="#pricing">Pricing</a></li><li><a href="#schedule">Ride day</a></li></ul></div>
+      <div><h3>Visit</h3><ul><li><a href="#visit">Hours</a></li><li><a href="#map">Map &amp; directions</a></li>{% if photos.length %}<li><a href="#gallery">Gallery</a></li>{% endif %}</ul></div>
+      <div><h3>Contact</h3><ul>{% for p in site.phones %}<li><a href="tel:{{ p | tel }}">{{ p }}</a></li>{% endfor %}<li><a href="mailto:{{ site.email }}">{{ site.email }}</a></li></ul></div>
+    </div>
+    <div class="foot-bottom">
+      <span>© <span id="yr">2026</span> {{ site.name }} · {{ site.city }}, {{ "Texas" if site.state == "TX" else site.state }}</span>
+      <a href="#top">Back to top</a>
+    </div>
+  </div>
+</footer>
+
+<script>window.MT_CONFIG = { email: {{ site.email | dump | safe }}, phone: {{ (phone1 or "") | dump | safe }} };</script>
+<script>
+{% include "site.js" %}
+</script>
+</body>
+</html>

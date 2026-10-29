@@ -1,0 +1,47 @@
+{
+  "title": "How a day at Mustang Trails runs.",
+  "intro": "Gates open at 8 am and the last riders roll out by 7 pm. Come for a couple of hours or stay all day. Here's how a typical day goes.",
+  "note": "",
+  "bring": [
+    "Helmet",
+    "Plenty of water",
+    "Lunch and snacks",
+    "Boots you don't mind muddy",
+    "A change of clothes",
+    "Sunscreen and bug spray"
+  ],
+  "photo": "",
+  "photo_caption": "",
+  "rows": [
+    {
+      "time": "8:00 am",
+      "title": "Gates open.",
+      "text": "Park, unload and head to check-in."
+    },
+    {
+      "time": "8:15 am",
+      "title": "Check-in and waiver.",
+      "text": "Show your pass or receipt."
+    },
+    {
+      "time": "8:30 am",
+      "title": "Safety briefing.",
+      "text": "Trail map, rules and today's conditions."
+    },
+    {
+      "time": "9:00 am",
+      "title": "Ride.",
+      "text": "Easy, intermediate and advanced loops open."
+    },
+    {
+      "time": "Midday",
+      "title": "Break at the shelter.",
+      "text": "Bring lunch and plenty of water."
+    },
+    {
+      "time": "7:00 pm",
+      "title": "Wash down and head out.",
+      "text": "Last vehicles off the trails."
+    }
+  ]
+}

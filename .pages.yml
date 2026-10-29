@@ -1,0 +1,194 @@
+# Control panel setup for Pages CMS (https://app.pagescms.org).
+# Each entry below shows up as a page in the panel. Saving commits to GitHub,
+# and Cloudflare Pages rebuilds the live site about a minute later.
+# Tip: put text in [square brackets] to show it as a yellow "fill this in" note on the site,
+# and wrap words in **double stars** to make them bold.
+
+media:
+  input: src/media
+  output: /media
+  categories: [image]
+
+content:
+  - name: status
+    label: Trail status banner
+    type: file
+    path: src/_data/status.json
+    format: json
+    fields:
+      - name: show
+        label: Show the status banner at the top
+        type: boolean
+        description: "Turn on to tell riders the trails are open, closed after rain, and so on."
+      - name: state
+        label: Status
+        type: select
+        options:
+          values:
+            - name: open
+              label: Trails open
+            - name: limited
+              label: Some trails closed
+            - name: closed
+              label: Trails closed
+            - name: soon
+              label: Opening soon
+      - name: message
+        label: Message under the menu bar
+        type: string
+      - name: updated
+        label: Last updated
+        type: date
+        options:
+          format: yyyy-MM-dd
+
+  - name: site
+    label: Business details
+    type: file
+    path: src/_data/site.json
+    format: json
+    fields:
+      - { name: name, label: Business name, type: string }
+      - { name: phones, label: Phone numbers, type: string, list: true, description: "Written the way people should see it, e.g. (469) 460-5358" }
+      - { name: email, label: Email, type: string, description: "Contact form and sign-up messages are sent here." }
+      - { name: street, label: Street address, type: string }
+      - { name: city, label: City, type: string }
+      - { name: state, label: State, type: string }
+      - { name: facebook, label: Facebook page link, type: string, description: "Leave empty until the page exists." }
+      - { name: instagram, label: Instagram page link, type: string, description: "Leave empty until the page exists." }
+      - { name: google_profile, label: Google Business Profile link, type: string, description: "Empty = a Google Maps search for the address." }
+      - { name: website_address, label: Website address, type: string, description: "The full address once there is a domain, e.g. https://mustangtrails.com" }
+      - { name: description, label: Search engine description, type: text }
+      - { name: share_title, label: Title when the link is shared, type: string }
+      - { name: share_text, label: Text when the link is shared, type: text }
+
+  - name: home
+    label: Top of page and welcome
+    type: file
+    path: src/_data/home.json
+    format: json
+    fields:
+      - { name: hero_image, label: Big top photo, type: image }
+      - { name: eyebrow, label: Small line above the name, type: string }
+      - { name: tagline, label: Tagline, type: string }
+      - { name: intro, label: Intro text, type: text }
+      - name: stats
+        label: Numbers under the photo
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{label}: {value} {unit}"
+        fields:
+          - { name: label, label: Label, type: string }
+          - { name: value, label: Value, type: string, description: "A plain number (like 300) counts up when it scrolls into view." }
+          - { name: unit, label: Unit, type: string }
+      - { name: welcome_quote, label: Welcome quote, type: text }
+      - { name: welcome_text, label: Welcome text, type: text, description: "Leave an empty line between paragraphs." }
+      - { name: namesake, label: Mustang Nepal note, type: text, description: "Leave empty to hide it." }
+
+  - name: gallery
+    label: Photo gallery
+    type: file
+    path: src/_data/gallery.json
+    format: json
+    fields:
+      - { name: title, label: Heading, type: string }
+      - name: photos
+        label: Photos
+        description: "Drag to reorder. Photos are resized automatically, so phone photos are fine."
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{index}. {caption}"
+        fields:
+          - { name: image, label: Photo, type: image, required: true }
+          - { name: caption, label: Caption, type: string }
+          - { name: alt, label: Description for screen readers, type: string, description: "One sentence describing what's in the photo." }
+          - name: category
+            label: Filter group
+            type: select
+            options:
+              values:
+                - name: mud
+                  label: Mud & trails
+                - name: ride
+                  label: On the ride
+                - name: crew
+                  label: Good company
+
+  - name: pricing
+    label: Pricing
+    type: file
+    path: src/_data/pricing.json
+    format: json
+    fields:
+      - { name: title, label: Heading, type: string }
+      - { name: intro, label: Intro text, type: text }
+      - name: rows
+        label: Passes
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{name}"
+        fields:
+          - { name: name, label: Name, type: string }
+          - { name: coming_soon, label: Show "Coming soon" instead of a price, type: boolean }
+          - { name: price, label: Price, type: string, description: "e.g. $50" }
+          - { name: price_note, label: Small text after the price, type: string, description: "e.g. per rider, entrance fee" }
+          - { name: details, label: What's included, type: string }
+          - { name: button, label: Button text, type: string }
+          - { name: link, label: Button goes to, type: string, description: "#signup = email sign-up, #contact = contact form, or a full web address" }
+          - { name: payment_link, label: Stripe Payment Link, type: string, description: "Paste a Stripe Payment Link to show a Buy button instead. Leave empty for now." }
+
+  - name: schedule
+    label: Ride day schedule
+    type: file
+    path: src/_data/schedule.json
+    format: json
+    fields:
+      - { name: title, label: Heading, type: string }
+      - { name: intro, label: Intro text, type: text }
+      - { name: note, label: Extra note, type: string, description: "Optional. Leave empty to hide it." }
+      - { name: bring, label: Bring along list, type: string, list: true }
+      - { name: photo, label: Photo, type: image }
+      - { name: photo_caption, label: Photo caption, type: string }
+      - name: rows
+        label: Schedule
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{time}: {title}"
+        fields:
+          - { name: time, label: Time, type: string }
+          - { name: title, label: Title, type: string }
+          - { name: text, label: Details, type: string }
+
+  - name: visit
+    label: Hours, trailhead and map
+    type: file
+    path: src/_data/visit.json
+    format: json
+    fields:
+      - { name: title, label: Heading, type: string }
+      - { name: hours, label: Hours, type: string }
+      - { name: hours_note, label: Note under the hours, type: text }
+      - { name: trailhead, label: At the trailhead, type: string, list: true }
+      - { name: directions, label: Directions, type: text }
+      - { name: map_image, label: Map image, type: image }
+      - { name: map_caption, label: Map caption, type: string }
+
+  - name: contact
+    label: Contact and sign-up
+    type: file
+    path: src/_data/contact.json
+    format: json
+    fields:
+      - { name: title, label: Heading, type: string }
+      - { name: intro, label: Intro text, type: text }
+      - { name: topics, label: Contact form topics, type: string, list: true }
+      - { name: signup_title, label: Sign-up heading, type: string }
+      - { name: signup_text, label: Sign-up text, type: text }
